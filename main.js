@@ -13,15 +13,12 @@ const emailInput = document.getElementById('emailInput');
 const textareaInput = document.getElementById('textareaInput');
 const privacyCheckbox = document.getElementById('privacyCheckbox');
 
-/*
-Visual feedbacks
-*/
-//valid
+//valid feedback id's
 const validModal = new bootstrap.Modal(document.getElementById("validModal"));
 const validModalTitle = document.getElementById('validModalTitle');
 const validModalText = document.getElementById('validModalText');
 
-//wrong
+//wrong feedback id's
 const nameFeedback = document.getElementById('nameFeedback');
 const surnameFeedback = document.getElementById('surnameFeedback');
 const emailFeedback = document.getElementById('emailFeedback');
@@ -50,24 +47,6 @@ form.addEventListener('submit', function (ev) {
   }
 
 
-  function isPromoValid(promocodeInserted) {
-    //reset previous states
-    promoInput.classList.remove('is-invalid', 'is-valid');
-
-    //Check if promo is valid
-    const promoAvailable = ['YHDNU32', 'JANJC63', 'PWKCN25', 'SJDPO96', 'POCIE24'];
-
-    if (promoAvailable.includes(promocodeInserted)) {
-      validModalTitle.innerHTML = `Sconto applicato!`
-      validModalText.innerHTML = `Sconto del 25% applicato, invece di ${basePrice}€ pagherai soltanto ${basePrice * 0.75}€`;
-      promoInput.classList.add('is-valid');
-      validModal.show();
-    } else {
-      promoInput.classList.add('is-invalid');
-      promoFeedback.innerText = 'Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare';
-    }
-  }
-
   //Name and Surname Input Validation
   function isNameSurnameValid(inputElement, inputFeedback) {
     //reset previous states
@@ -89,6 +68,7 @@ form.addEventListener('submit', function (ev) {
     }
   }
 
+
   //Email Validation
   function emailRegexValidation(email) {
     const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu)$/
@@ -108,6 +88,7 @@ form.addEventListener('submit', function (ev) {
     }
   }
 
+  //Job Description Validation
   function isJobDescValid(jobdesc, jobfeedback) {
     //reset previous states
     jobdesc.classList.remove('is-valid', 'is-invalid');
@@ -122,6 +103,8 @@ form.addEventListener('submit', function (ev) {
     }
   }
 
+
+  //Privacy checkbox validation
   function privacyChecked() {
 
     privacyCheckbox.classList.remove('is-valid', 'is-invalid');
@@ -135,6 +118,27 @@ form.addEventListener('submit', function (ev) {
     }
   }
 
+  //Promocode Validation
+  function isPromoValid(promocodeInserted) {
+    //reset previous states
+    promoInput.classList.remove('is-invalid', 'is-valid');
+
+    //Check if promo is valid
+    const promoAvailable = ['YHDNU32', 'JANJC63', 'PWKCN25', 'SJDPO96', 'POCIE24'];
+
+    if (promoAvailable.includes(promocodeInserted)) {
+      validModalTitle.innerHTML = `Sconto applicato!`
+      validModalText.innerHTML = `Sconto del 25% applicato, invece di ${basePrice}€ pagherai soltanto ${basePrice * 0.75}€`;
+      promoInput.classList.add('is-valid');
+      validModal.show();
+    } else {
+      promoInput.classList.add('is-invalid');
+      promoFeedback.innerText = 'Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare';
+    }
+  }
+
+
+  //Call all validation functions
   isNameSurnameValid(nameInput, nameFeedback);
   isNameSurnameValid(surnameInput, surnameFeedback);
   isEmailValid(emailInput, emailFeedback);
@@ -146,10 +150,15 @@ form.addEventListener('submit', function (ev) {
     isEmailValid(emailInput, emailFeedback) &&
     isJobDescValid(textareaInput, textareaFeedback)
     privacyChecked();
+    
 
+  
+  //If all forms valid, check promocode
   if (isValidForm) {
     if (promoInput.value.trim() === "") {
+      //reset previous states
       promoInput.classList.remove('is-invalid');
+
       validModalTitle.innerHTML = `Preventivo Inoltrato`;
       validModalText.innerHTML = `Il costo del progetto è di ${basePrice}€`;
       validModal.show();
