@@ -78,7 +78,7 @@ form.addEventListener('submit', function (ev) {
       inputFeedback.innerText = 'Non puoi inserire un valore vuoto';
       return false;
 
-    } else if (!isNaN(nameInput.value)) {
+    } else if (!isNaN(inputElement.value)) {
       inputElement.classList.add('is-invalid');
       inputFeedback.innerText = 'Non puoi inserire un numero'
       return false;
