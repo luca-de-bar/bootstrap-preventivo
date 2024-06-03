@@ -1,0 +1,16 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+.nav-link:hover{
+    color: #2a66e7 !important;
+    transition: all 0.3s;
+}
+
+main
+{
+    margin-top:5rem;
+}
