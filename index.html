@@ -78,14 +78,17 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Nome</label>
                         <input type="text" class="form-control" id="nameInput">
+                        <div id="nameFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label for="surname" class="form-label">Cognome</label>
                         <input type="text" class="form-control" id="surnameInput">
+                        <div id="surnameFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="emailInput">
+                        <div id="emailFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label for="typeJobs">Seleziona il tipo di lavoro :</label>
@@ -97,14 +100,16 @@
                     </div>
                     <div class="mb-3">
                         <label for="jobDescription">Descrizione del lavoro : </label>
-                        <textarea class="form-control"></textarea>
+                        <textarea class="form-control" id="textareaInput"></textarea>
+                        <div id="textareaFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
                         <label for="promocode">Codice Promozionale</label>
                         <input type="text" class="form-control" id="promoInput">
+                        <div id="promoFeedback" class="invalid-feedback"></div>
                     </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <input class="form-check-input" type="checkbox" value="" id="privacyCheckbox">
                         <label class="form-check-label" for="flexCheckDefault">
                             Accetto la Privacy Policy
                         </label>
@@ -138,24 +143,6 @@
             <h2>Prezzo Finale :</h2>
             <p id="finalPriceText" class="fw-bold display-6"></p>
         </section>
-
-        <!-- MODAL WRONG FEEDBACK -->
-      <div class="modal mt-5" tabindex="-1" id="wrongPromo">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger">Promocode non valido!</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p>Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- MODAL VALID FEEDBACK -->
       <div class="modal mt-5" tabindex="-1" id="validModal">
