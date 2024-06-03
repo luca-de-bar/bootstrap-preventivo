@@ -6,7 +6,7 @@ const submitButton = document.getElementById('submitButton')
 const selectForm = document.getElementById('selectForm');
 const promoInput = document.getElementById('promoInput');
 
-//Forms Input to validate
+//Form Input to validate
 const nameInput = document.getElementById('nameInput');
 const surnameInput = document.getElementById('surnameInput');
 const emailInput = document.getElementById('emailInput');
