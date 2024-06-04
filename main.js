@@ -49,23 +49,23 @@ form.addEventListener('submit', function (ev) {
 
   function isEmpty(inputElement, inputFeedback) {
     //reset element previous states
-    inputElement.classlist.remove('is-invalid', 'is-valid');
+    inputElement.classList.remove('is-invalid');
 
     if (inputElement.value.trim() === "") {
-      inputElement.classlist.add('is-invalid');
-      inputFeedback.InnerText = 'Non puoi inserire un valore vuoto';
-      return false;
+      inputElement.classList.add('is-invalid');
+      inputFeedback.innerHTML = 'Non puoi inserire un valore vuoto';
+      return true;
     }
   }
 
   function isNumeric(inputElement, inputFeedback) {
     //reset element previous states
-    inputElement.classlist.remove('is-invalid', 'is-valid');
+    inputElement.classList.remove('is-invalid', 'is-valid');
 
     if (!isNaN(inputElement.value)) {
-      inputElement.classlist.add('is-invalid');
-      inputFeedback.InnerText = 'Non puoi inserire un numero';
-      return false;
+      inputElement.classList.add('is-invalid');
+      inputFeedback.innerText = 'Non puoi inserire un numero';
+      return true;
     }
   }
 
@@ -74,6 +74,8 @@ form.addEventListener('submit', function (ev) {
     const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu)$/
     return regex.test(email)
   }
+
+
 
   // //Name and Surname Input Validation
   // function isNameSurnameValid(inputElement, inputFeedback) {
