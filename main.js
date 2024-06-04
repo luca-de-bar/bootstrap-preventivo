@@ -47,123 +47,151 @@ form.addEventListener('submit', function (ev) {
   }
 
 
-  //Name and Surname Input Validation
-  function isNameSurnameValid(inputElement, inputFeedback) {
-    //reset previous states
-    inputElement.classList.remove('is-valid', 'is-invalid')
+  function isEmpty(inputElement, inputFeedback) {
+    //reset element previous states
+    inputElement.classlist.remove('is-invalid', 'is-valid');
 
     if (inputElement.value.trim() === "") {
-      inputElement.classList.add('is-invalid');
-      inputFeedback.innerText = 'Non puoi inserire un valore vuoto';
+      inputElement.classlist.add('is-invalid');
+      inputFeedback.InnerText = 'Non puoi inserire un valore vuoto';
       return false;
-
-    } else if (!isNaN(inputElement.value)) {
-      inputElement.classList.add('is-invalid');
-      inputFeedback.innerText = 'Non puoi inserire un numero'
-      return false;
-
-    } else {
-      inputElement.classList.add('is-valid');
-      return true;
     }
   }
 
+  function isNumeric(inputElement, inputFeedback) {
+    //reset element previous states
+    inputElement.classlist.remove('is-invalid', 'is-valid');
 
-  //Email Validation
+    if (!isNaN(inputElement.value)) {
+      inputElement.classlist.add('is-invalid');
+      inputFeedback.InnerText = 'Non puoi inserire un numero';
+      return false;
+    }
+  }
+
+  //Regex Email Validation
   function emailRegexValidation(email) {
     const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu)$/
     return regex.test(email)
   }
 
-  function isEmailValid(email, feedback) {
-    email.classList.remove('is-invalid', 'is-valid');
+  // //Name and Surname Input Validation
+  // function isNameSurnameValid(inputElement, inputFeedback) {
+  //   //reset previous states
+  //   inputElement.classList.remove('is-valid', 'is-invalid')
 
-    if (!emailRegexValidation(email.value.trim())) {
-      email.classList.add('is-invalid');
-      feedback.innerText = 'La mail inserita non è valida'
-      return false;
-    } else {
-      email.classList.add('is-valid');
-      return true;
-    }
-  }
+  //   if (inputElement.value.trim() === "") {
+  //     inputElement.classList.add('is-invalid');
+  //     inputFeedback.innerText = 'Non puoi inserire un valore vuoto';
+  //     return false;
 
-  //Job Description Validation
-  function isJobDescValid(jobdesc, jobfeedback) {
-    //reset previous states
-    jobdesc.classList.remove('is-valid', 'is-invalid');
+  //   } else if (!isNaN(inputElement.value)) {
+  //     inputElement.classList.add('is-invalid');
+  //     inputFeedback.innerText = 'Non puoi inserire un numero'
+  //     return false;
 
-    if (jobdesc.value.trim() === "") {
-      jobdesc.classList.add('is-invalid');
-      jobfeedback.innerText = 'Inserisci una descrizione del lavoro';
-      return false;
-    } else {
-      jobdesc.classList.add('is-valid');
-      return true;
-    }
-  }
+  //   } else {
+  //     inputElement.classList.add('is-valid');
+  //     return true;
+  //   }
+  // }
 
 
-  //Privacy checkbox validation
-  function privacyChecked() {
+  // //Email Validation
+  // function emailRegexValidation(email) {
+  //   const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu)$/
+  //   return regex.test(email)
+  // }
 
-    privacyCheckbox.classList.remove('is-valid', 'is-invalid');
+  // function isEmailValid(email, feedback) {
+  //   email.classList.remove('is-invalid', 'is-valid');
 
-    if (!privacyCheckbox.checked) {
-      privacyCheckbox.classList.add('is-invalid');
-      return false;
-    } else {
-      privacyCheckbox.classList.add('is-valid');
-      return true;
-    }
-  }
+  //   if (!emailRegexValidation(email.value.trim())) {
+  //     email.classList.add('is-invalid');
+  //     feedback.innerText = 'La mail inserita non è valida'
+  //     return false;
+  //   } else {
+  //     email.classList.add('is-valid');
+  //     return true;
+  //   }
+  // }
 
-  //Promocode Validation
-  function isPromoValid(promocodeInserted) {
-    //reset previous states
-    promoInput.classList.remove('is-invalid', 'is-valid');
+  // //Job Description Validation
+  // function isJobDescValid(jobdesc, jobfeedback) {
+  //   //reset previous states
+  //   jobdesc.classList.remove('is-valid', 'is-invalid');
 
-    //Check if promo is valid
-    const promoAvailable = ['YHDNU32', 'JANJC63', 'PWKCN25', 'SJDPO96', 'POCIE24'];
-
-    if (promoAvailable.includes(promocodeInserted)) {
-      validModalTitle.innerHTML = `Sconto applicato!`
-      validModalText.innerHTML = `Sconto del 25% applicato, invece di ${basePrice}€ pagherai soltanto ${basePrice * 0.75}€`;
-      promoInput.classList.add('is-valid');
-      validModal.show();
-    } else {
-      promoInput.classList.add('is-invalid');
-      promoFeedback.innerText = 'Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare';
-    }
-  }
+  //   if (jobdesc.value.trim() === "") {
+  //     jobdesc.classList.add('is-invalid');
+  //     jobfeedback.innerText = 'Inserisci una descrizione del lavoro';
+  //     return false;
+  //   } else {
+  //     jobdesc.classList.add('is-valid');
+  //     return true;
+  //   }
+  // }
 
 
-  //Call all validation functions
-  isNameSurnameValid(nameInput, nameFeedback);
-  isNameSurnameValid(surnameInput, surnameFeedback);
-  isEmailValid(emailInput, emailFeedback);
-  isJobDescValid(textareaInput, textareaFeedback);
+  // //Privacy checkbox validation
+  // function privacyChecked() {
 
-  const isValidForm =
-    isNameSurnameValid(nameInput, nameFeedback) &&
-    isNameSurnameValid(surnameInput, surnameFeedback) &&
-    isEmailValid(emailInput, emailFeedback) &&
-    isJobDescValid(textareaInput, textareaFeedback)
-    privacyChecked();
+  //   privacyCheckbox.classList.remove('is-valid', 'is-invalid');
+
+  //   if (!privacyCheckbox.checked) {
+  //     privacyCheckbox.classList.add('is-invalid');
+  //     return false;
+  //   } else {
+  //     privacyCheckbox.classList.add('is-valid');
+  //     return true;
+  //   }
+  // }
+
+  // //Promocode Validation
+  // function isPromoValid(promocodeInserted) {
+  //   //reset previous states
+  //   promoInput.classList.remove('is-invalid', 'is-valid');
+
+  //   //Check if promo is valid
+  //   const promoAvailable = ['YHDNU32', 'JANJC63', 'PWKCN25', 'SJDPO96', 'POCIE24'];
+
+  //   if (promoAvailable.includes(promocodeInserted)) {
+  //     validModalTitle.innerHTML = `Sconto applicato!`
+  //     validModalText.innerHTML = `Sconto del 25% applicato, invece di ${basePrice}€ pagherai soltanto ${basePrice * 0.75}€`;
+  //     promoInput.classList.add('is-valid');
+  //     validModal.show();
+  //   } else {
+  //     promoInput.classList.add('is-invalid');
+  //     promoFeedback.innerText = 'Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare';
+  //   }
+  // }
+
+
+  // //Call all validation functions
+  // isNameSurnameValid(nameInput, nameFeedback);
+  // isNameSurnameValid(surnameInput, surnameFeedback);
+  // isEmailValid(emailInput, emailFeedback);
+  // isJobDescValid(textareaInput, textareaFeedback);
+
+  // const isValidForm =
+  //   isNameSurnameValid(nameInput, nameFeedback) &&
+  //   isNameSurnameValid(surnameInput, surnameFeedback) &&
+  //   isEmailValid(emailInput, emailFeedback) &&
+  //   isJobDescValid(textareaInput, textareaFeedback)
+  //   privacyChecked();
     
 
   
-  //If all forms valid, check promocode
-  if (isValidForm) {
-    if (promoInput.value.trim() === "") {
-      //reset previous states
-      promoInput.classList.remove('is-invalid');
+  // //If all forms valid, check promocode
+  // if (isValidForm) {
+  //   if (promoInput.value.trim() === "") {
+  //     //reset previous states
+  //     promoInput.classList.remove('is-invalid');
 
-      validModalTitle.innerHTML = `Preventivo Inoltrato`;
-      validModalText.innerHTML = `Il costo del progetto è di ${basePrice}€`;
-      validModal.show();
-    } else {
-      isPromoValid(promoInput.value.trim());
-    }
-  }
+  //     validModalTitle.innerHTML = `Preventivo Inoltrato`;
+  //     validModalText.innerHTML = `Il costo del progetto è di ${basePrice}€`;
+  //     validModal.show();
+  //   } else {
+  //     isPromoValid(promoInput.value.trim());
+  //   }
+  // }
 })
