@@ -1,199 +1,182 @@
 'use strict';
 
-//Form elements id
-const form = document.getElementById('form');
-const submitButton = document.getElementById('submitButton')
-const selectForm = document.getElementById('selectForm');
-const promoInput = document.getElementById('promoInput');
+// Form elements
+const elements = {
+    form: document.getElementById('form'),
+    submitButton: document.getElementById('submitButton'),
+    selectForm: document.getElementById('selectForm'),
+};
 
-//Form Input to validate
-const nameInput = document.getElementById('nameInput');
-const surnameInput = document.getElementById('surnameInput');
-const emailInput = document.getElementById('emailInput');
-const textareaInput = document.getElementById('textareaInput');
-const privacyCheckbox = document.getElementById('privacyCheckbox');
-
-//valid feedback id's
-const validModal = new bootstrap.Modal(document.getElementById("validModal"));
-const validModalTitle = document.getElementById('validModalTitle');
-const validModalText = document.getElementById('validModalText');
-
-//wrong feedback id's
-const nameFeedback = document.getElementById('nameFeedback');
-const surnameFeedback = document.getElementById('surnameFeedback');
-const emailFeedback = document.getElementById('emailFeedback');
-const textareaFeedback = document.getElementById('textareaFeedback');
-const promoFeedback = document.getElementById('promoFeedback');
-
-
-//submitButton event listener
-form.addEventListener('submit', function (ev) {
-
-  //Ev Prevent Default
-  ev.preventDefault()
-
-  //Check current select option value, calculate price based on it
-  let basePrice;
-  switch (Number(selectForm.value)) {
-    case 1:
-      basePrice = 20.50 * 10;
-      break;
-    case 2:
-      basePrice = 15.30 * 10;
-      break;
-    case 3:
-      basePrice = 33.60 * 10;
-      break;
-  }
-
-
-  function isEmpty(inputElement, inputFeedback) {
-    //reset element previous states
-    inputElement.classList.remove('is-invalid');
-
-    if (inputElement.value.trim() === "") {
-      inputElement.classList.add('is-invalid');
-      inputFeedback.innerHTML = 'Non puoi inserire un valore vuoto';
-      return true;
+// Input elements, feedback elements, and feedback text
+const inputs = {
+    name: {
+        element: document.getElementById('nameInput'),
+        feedback: document.getElementById('nameFeedback'),
+        feedbackText: {
+            empty: 'Non puoi inserire un valore vuoto',
+            isNumeric: 'Non puoi inserire un numero'
+        }
+    },
+    surname: {
+        element: document.getElementById('surnameInput'),
+        feedback: document.getElementById('surnameFeedback'),
+        feedbackText: {
+            empty: 'Non puoi inserire un valore vuoto',
+            isNumeric: 'Non puoi inserire un numero'
+        }
+    },
+    email: {
+        element: document.getElementById('emailInput'),
+        feedback: document.getElementById('emailFeedback'),
+        feedbackText: {
+            invalid: 'La mail inserita non è valida'
+        }
+    },
+    textarea: {
+        element: document.getElementById('textareaInput'),
+        feedback: document.getElementById('textareaFeedback'),
+        feedbackText: {
+            empty: 'Non puoi inserire un valore vuoto'
+        }
+    },
+    privacy: {
+        element: document.getElementById('privacyCheckbox'),
+        feedback: document.getElementById('privacyFeedback'),
+        feedbackText: {
+            invalid: 'Devi accettare la Privacy Policy'
+        }
+    },
+    promo: {
+        element: document.getElementById('promoInput'),
+        feedback: document.getElementById('promoFeedback'),
+        feedbackText: {
+            invalid: 'Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare',
+            success: (basePrice) => `Sconto del 25% applicato, invece di ${basePrice}€ pagherai soltanto ${basePrice * 0.75}€. Riceverai il preventivo all'indirizzo e-mail specificato`
+        }
     }
-  }
+};
 
-  function isNumeric(inputElement, inputFeedback) {
-    //reset element previous states
-    inputElement.classList.remove('is-invalid', 'is-valid');
+// Modal elements
+const modal = {
+    validModal: new bootstrap.Modal(document.getElementById("validModal")),
+    validModalTitle: document.getElementById('validModalTitle'),
+    validModalText: document.getElementById('validModalText')
+};
 
-    if (!isNaN(inputElement.value)) {
-      inputElement.classList.add('is-invalid');
-      inputFeedback.innerText = 'Non puoi inserire un numero';
-      return true;
+//Generic function, reset elements previous states.
+function resetState(element) {
+    element.classList.remove('is-valid', 'is-invalid');
+}
+
+//Generic function if input Empty
+function isEmpty(input) {
+    resetState(input.element);
+    if (input.element.value.trim() === "") {
+        input.element.classList.add('is-invalid');
+        input.feedback.innerText = input.feedbackText.empty;
+        return true;
     }
-  }
+    return false;
+}
 
-  //Regex Email Validation
-  function emailRegexValidation(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu)$/
-    return regex.test(email)
-  }
+//Generic function if input Numeric
+function isNumeric(input) {
+    resetState(input.element);
+    if (!isNaN(input.element.value)) {
+        input.element.classList.add('is-invalid');
+        input.feedback.innerText = input.feedbackText.isNumeric;
+        return true;
+    }
+    return false;
+}
 
+//Email REGEX
+function emailRegexValidation(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu|eu)$/;
+    return regex.test(email);
+}
 
+//if Email is valid, based on REGEX.
+function isEmailValid(input) {
+    resetState(input.element);
+    if (!emailRegexValidation(input.element.value.trim())) {
+        input.element.classList.add('is-invalid');
+        input.feedback.innerText = input.feedbackText.invalid;
+        return false;
+    }
+    input.element.classList.add('is-valid');
+    return true;
+}
 
-  // //Name and Surname Input Validation
-  // function isNameSurnameValid(inputElement, inputFeedback) {
-  //   //reset previous states
-  //   inputElement.classList.remove('is-valid', 'is-invalid')
+//if privacy checkbox is checked
+function privacyChecked() {
+    resetState(inputs.privacy.element);
+    if (!inputs.privacy.element.checked) {
+        inputs.privacy.element.classList.add('is-invalid');
+        inputs.privacy.feedback.innerText = inputs.privacy.feedbackText.invalid;
+        return false;
+    }
+    inputs.privacy.element.classList.add('is-valid');
+    return true;
+}
 
-  //   if (inputElement.value.trim() === "") {
-  //     inputElement.classList.add('is-invalid');
-  //     inputFeedback.innerText = 'Non puoi inserire un valore vuoto';
-  //     return false;
+//Validate promocode
+function isPromoValid(promocodeInserted, basePrice) {
+    resetState(inputs.promo.element);
 
-  //   } else if (!isNaN(inputElement.value)) {
-  //     inputElement.classList.add('is-invalid');
-  //     inputFeedback.innerText = 'Non puoi inserire un numero'
-  //     return false;
+    const promoAvailable = ['YHDNU32', 'JANJC63', 'PWKCN25', 'SJDPO96', 'POCIE24'];
 
-  //   } else {
-  //     inputElement.classList.add('is-valid');
-  //     return true;
-  //   }
-  // }
+    if (promoAvailable.includes(promocodeInserted)) {
+        modal.validModalTitle.innerText = `Sconto applicato!`;
+        modal.validModalText.innerText = inputs.promo.feedbackText.success(basePrice);
+        inputs.promo.element.classList.add('is-valid');
+        modal.validModal.show();
+    } else {
+        inputs.promo.element.classList.add('is-invalid');
+        inputs.promo.feedback.innerText = inputs.promo.feedbackText.invalid;
+    }
+}
 
+// SubmitButton event listener
+elements.form.addEventListener('submit', function (ev) {
+    // Ev Prevent Default
+    ev.preventDefault();
 
-  // //Email Validation
-  // function emailRegexValidation(email) {
-  //   const regex = /^[^\s@]+@[^\s@]+\.(it|com|net|org|edu)$/
-  //   return regex.test(email)
-  // }
+    // Check current select option value, calculate price based on it
+    let basePrice;
+    switch (Number(elements.selectForm.value)) {
+        case 1:
+            basePrice = 20.50 * 10;
+            break;
+        case 2:
+            basePrice = 15.30 * 10;
+            break;
+        case 3:
+            basePrice = 33.60 * 10;
+            break;
+    }
 
-  // function isEmailValid(email, feedback) {
-  //   email.classList.remove('is-invalid', 'is-valid');
+    // Validate name and surname
+    const isNameValid = !isEmpty(inputs.name) && !isNumeric(inputs.name);
+    const isSurnameValid = !isEmpty(inputs.surname) && !isNumeric(inputs.surname);
 
-  //   if (!emailRegexValidation(email.value.trim())) {
-  //     email.classList.add('is-invalid');
-  //     feedback.innerText = 'La mail inserita non è valida'
-  //     return false;
-  //   } else {
-  //     email.classList.add('is-valid');
-  //     return true;
-  //   }
-  // }
+    //Validate all inputs
+    const isValidForm =
+        isNameValid &&
+        isSurnameValid &&
+        isEmailValid(inputs.email) &&
+        !isEmpty(inputs.textarea) &&
+        privacyChecked();
 
-  // //Job Description Validation
-  // function isJobDescValid(jobdesc, jobfeedback) {
-  //   //reset previous states
-  //   jobdesc.classList.remove('is-valid', 'is-invalid');
-
-  //   if (jobdesc.value.trim() === "") {
-  //     jobdesc.classList.add('is-invalid');
-  //     jobfeedback.innerText = 'Inserisci una descrizione del lavoro';
-  //     return false;
-  //   } else {
-  //     jobdesc.classList.add('is-valid');
-  //     return true;
-  //   }
-  // }
-
-
-  // //Privacy checkbox validation
-  // function privacyChecked() {
-
-  //   privacyCheckbox.classList.remove('is-valid', 'is-invalid');
-
-  //   if (!privacyCheckbox.checked) {
-  //     privacyCheckbox.classList.add('is-invalid');
-  //     return false;
-  //   } else {
-  //     privacyCheckbox.classList.add('is-valid');
-  //     return true;
-  //   }
-  // }
-
-  // //Promocode Validation
-  // function isPromoValid(promocodeInserted) {
-  //   //reset previous states
-  //   promoInput.classList.remove('is-invalid', 'is-valid');
-
-  //   //Check if promo is valid
-  //   const promoAvailable = ['YHDNU32', 'JANJC63', 'PWKCN25', 'SJDPO96', 'POCIE24'];
-
-  //   if (promoAvailable.includes(promocodeInserted)) {
-  //     validModalTitle.innerHTML = `Sconto applicato!`
-  //     validModalText.innerHTML = `Sconto del 25% applicato, invece di ${basePrice}€ pagherai soltanto ${basePrice * 0.75}€`;
-  //     promoInput.classList.add('is-valid');
-  //     validModal.show();
-  //   } else {
-  //     promoInput.classList.add('is-invalid');
-  //     promoFeedback.innerText = 'Il Promocode inserito non è valido. Verifica che sia scritto correttamente per poterlo utilizzare';
-  //   }
-  // }
-
-
-  // //Call all validation functions
-  // isNameSurnameValid(nameInput, nameFeedback);
-  // isNameSurnameValid(surnameInput, surnameFeedback);
-  // isEmailValid(emailInput, emailFeedback);
-  // isJobDescValid(textareaInput, textareaFeedback);
-
-  // const isValidForm =
-  //   isNameSurnameValid(nameInput, nameFeedback) &&
-  //   isNameSurnameValid(surnameInput, surnameFeedback) &&
-  //   isEmailValid(emailInput, emailFeedback) &&
-  //   isJobDescValid(textareaInput, textareaFeedback)
-  //   privacyChecked();
-    
-
-  
-  // //If all forms valid, check promocode
-  // if (isValidForm) {
-  //   if (promoInput.value.trim() === "") {
-  //     //reset previous states
-  //     promoInput.classList.remove('is-invalid');
-
-  //     validModalTitle.innerHTML = `Preventivo Inoltrato`;
-  //     validModalText.innerHTML = `Il costo del progetto è di ${basePrice}€`;
-  //     validModal.show();
-  //   } else {
-  //     isPromoValid(promoInput.value.trim());
-  //   }
-  // }
-})
+    // If inputs valid, check promocode.
+    if (isValidForm) {
+        if (inputs.promo.element.value.trim() === "") {
+            resetState(inputs.promo.element);
+            modal.validModalTitle.innerText = `Preventivo Inoltrato`;
+            modal.validModalText.innerText = `Il costo del progetto è di ${basePrice}€. Riceverai il preventivo all'indirizzo e-mail specificato.`;
+            modal.validModal.show();
+        } else {
+            isPromoValid(inputs.promo.element.value.trim(), basePrice);
+        }
+    }
+});
